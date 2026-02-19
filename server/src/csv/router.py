@@ -3,9 +3,11 @@ from pathlib import Path
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 import shutil
 from sqlalchemy.ext.asyncio import AsyncSession
+from src.csv.schemas import CSVFileView
 from src.csv.models import CSVFile
 from src.database import get_async_session
 from src.auth.router import get_current_user
+from sqlalchemy import exc, select
 
 UPLOAD_DIR = Path("data/uploads")
 UPLOAD_DIR.mkdir(exist_ok=True, parents=True)
@@ -43,3 +45,20 @@ async def upload_file(
         "content_type": file.content_type,
         "path": str(file_path),
     }
+
+
+@router.get("/files")
+async def list_files(
+    session: AsyncSession = Depends(get_async_session),
+) -> list[CSVFileView]:
+    query = (
+        select(CSVFile)
+        # .where(CSVFile.is_processed == False)
+        .order_by(CSVFile.created_date.desc())
+    )
+
+    result = await session.execute(query)
+
+    files = result.scalars().all()
+
+    return files
