@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "personal-finance-app"
+description = "A personal finance management application built with FastAPI and SQLAlchemy."
+authors = ["Enox2"]
+version = "0.1.0"
+license = "MIT"
+readme = "README.md"
+homepage = ""
+repository = ""
+documentation = ""
+
+[tool.poetry.dependencies]
+python = ">=3.11.8,<3.13"
+fastapi = "^0.118.0"
+uvicorn = { extras = ["standard"], version = "^0.23.0" }
+SQLAlchemy = { extras = ["asyncio"], version = "^2.0.30" }
+aiosqlite = "^0.21.0"
+pydantic = "^2.12.0"
+numpy = "^1.24.0"
+pandas = "^2.2.0"
+python-dotenv = "^1.0.1"
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-multipart = "^0.0.22"
+argon2-cffi = "^25.1.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^8.4.0"
+pytest-asyncio = "^0.22.0"
+black = "^23.9.1"
+isort = "^6.0.0"
+mypy = "^1.5.1"
+httpx = "^0.28.1"
+alembic = "^1.18.3"
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+python_version = 3.11
+strict = true
+
+[build-system]
+requires = ["poetry-core>=1.6.0"]
+build-backend = "poetry.core.masonry.api"
