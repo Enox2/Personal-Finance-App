@@ -7,7 +7,7 @@ from src.csv.schemas import CSVFileView
 from src.csv.models import CSVFile
 from src.database import get_async_session
 from src.auth.router import get_current_user
-from sqlalchemy import exc, select
+from sqlalchemy import select
 
 UPLOAD_DIR = Path("data/uploads")
 UPLOAD_DIR.mkdir(exist_ok=True, parents=True)
