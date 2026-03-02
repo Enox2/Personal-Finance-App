@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 
 import pandas as pd
 from pandas import DataFrame
@@ -28,15 +29,24 @@ def prepare_dataframe(file_model: CSVFile | None) -> DataFrame:
         "transaction_description",
     ]
 
-    examples = (
-        df.groupby("transaction_type", as_index=False)
-        .first()[["transaction_type", "transaction_description", "amount"]]
-    )
-
-    for _, row in examples.iterrows():
-        print(
-            f"{row['transaction_type']}: {row['amount']}, {row['transaction_description']}\n"
-        )
+    df["transaction_date"] = pd.to_datetime(df["transaction_date"]).dt.date
+    df["value_date"] = pd.to_datetime(df["value_date"]).dt.date
+    df["merchant"] = df["transaction_description"].apply(extract_merchant)
 
     return df
 
+
+def extract_merchant(description: str) -> str:
+    match = re.search(r"Lokalizacja:\s*Adres:\s*(.+?)\s*Miasto:", description)
+    if match:
+        return match.group(1).strip()
+
+    match = re.search(r"Nazwa odbiorcy:\s*(.+?)(?:\s*Adres odbiorcy:|$)", description)
+    if match:
+        return match.group(1).strip()
+
+    match = re.search(r"Lokalizacja:\s*Adres:\s*(\S+)", description)
+    if match:
+        return match.group(1).strip()
+
+    return ""

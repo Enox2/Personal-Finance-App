@@ -20,6 +20,7 @@ sys.path.append(str(BASE_DIR / "src"))
 from src.db.session import Base
 from src.domains.auth import models as auth_models
 from src.domains.csv import models as csv_models
+from src.domains.etl import models as etl_models
 
 # Alembic config
 config = context.config
