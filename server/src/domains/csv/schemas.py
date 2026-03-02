@@ -1,5 +1,6 @@
-from pydantic import BaseModel
 from datetime import datetime
+
+from pydantic import BaseModel
 
 
 class CSVFileView(BaseModel):
@@ -9,3 +10,4 @@ class CSVFileView(BaseModel):
     created_date: datetime
 
     model_config = {"from_attributes": True}
+

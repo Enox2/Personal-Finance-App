@@ -1,9 +1,9 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, Integer, String, Boolean, func
+from sqlalchemy import Boolean, DateTime, Integer, String, func
 from sqlalchemy.orm import Mapped, mapped_column
 
-from src.database import Base
+from src.db.session import Base
 
 
 class CSVFile(Base):
@@ -23,3 +23,4 @@ class CSVFile(Base):
         nullable=False,
     )
     path: Mapped[str] = mapped_column(String(500), nullable=False)
+

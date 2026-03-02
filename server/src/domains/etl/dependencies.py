@@ -1,11 +1,12 @@
 from fastapi import Depends
-
-from src.database import get_async_session
-from src.process_files.application_service import ProcessFilesApplicationService
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from src.db.session import get_async_session
+from src.domains.etl.service import ProcessFilesApplicationService
 
 
 def get_parser_service(
     session: AsyncSession = Depends(get_async_session),
 ) -> ProcessFilesApplicationService:
     return ProcessFilesApplicationService(session=session)
+

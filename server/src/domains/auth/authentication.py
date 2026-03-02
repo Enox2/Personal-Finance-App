@@ -1,8 +1,8 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.auth.models import AccessToken, User
-from src.auth.password import verify_password
+from src.domains.auth.models import AccessToken, User
+from src.domains.auth.password import verify_password
 
 
 async def authenticate(
@@ -26,3 +26,4 @@ async def create_access_token(user: User, session: AsyncSession) -> AccessToken:
     session.add(access_token)
     await session.commit()
     return access_token
+

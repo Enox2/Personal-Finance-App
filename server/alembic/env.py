@@ -17,7 +17,9 @@ SYNC_DATABASE_URL = DATABASE_URL.replace("+aiosqlite", "")  # sync engine for Al
 # append src to path so imports work
 sys.path.append(str(BASE_DIR / "src"))
 
-from src.database import Base  # import models metadata only
+from src.db.session import Base
+from src.domains.auth import models as auth_models
+from src.domains.csv import models as csv_models
 
 # Alembic config
 config = context.config

@@ -4,7 +4,7 @@ from datetime import datetime, timedelta, timezone
 from sqlalchemy import DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.database import Base
+from src.db.session import Base
 
 
 def get_expiration_date(duration_seconds: int = 3600) -> datetime:
@@ -37,3 +37,4 @@ class AccessToken(Base):
     )
 
     user: Mapped[User] = relationship("User", lazy="joined")
+
