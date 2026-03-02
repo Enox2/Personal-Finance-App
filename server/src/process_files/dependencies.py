@@ -1,7 +1,7 @@
 from fastapi import Depends
 
-from server.src.database import get_async_session
-from server.src.process_files.application_service import ProcessFilesApplicationService
+from src.database import get_async_session
+from src.process_files.application_service import ProcessFilesApplicationService
 from sqlalchemy.ext.asyncio import AsyncSession
 
 

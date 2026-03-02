@@ -18,5 +18,5 @@ async def process_file(
     file_id: int,
     application_service: ProcessFilesApplicationService = Depends(get_parser_service),
 ):
-    await application_service.start_processing_file(file_id)
-    return {"message": f"Processing file with ID {file_id}"}
+    rows = await application_service.start_processing_file(file_id)
+    return rows.head()
