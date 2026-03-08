@@ -18,7 +18,7 @@ def prepare_dataframe(file_model: CSVFile | None) -> DataFrame:
         " ".join, axis=1
     )
 
-    df = df.drop(columns=[*unnamed_cols, "Saldo po transakcji"])
+    df = df.drop(columns=[*unnamed_cols])
 
     df.columns = [
         "transaction_date",
@@ -37,17 +37,23 @@ def prepare_dataframe(file_model: CSVFile | None) -> DataFrame:
 
 
 def extract_merchant(description: str) -> str:
+    merchant_match = ""
     match = re.search(r"Lokalizacja:\s*Adres:\s*(.+?)\s*Miasto:", description)
     if match:
-        return match.group(1).strip()
+        merchant_match = match.group(1).strip()
+        return _normalize_merchant(merchant_match)
 
     match = re.search(r"Nazwa odbiorcy:\s*(.+?)(?:\s*Adres odbiorcy:|$)", description)
     if match:
-        return match.group(1).strip()
+        merchant_match = match.group(1).strip()
+        return _normalize_merchant(merchant_match)
 
     match = re.search(r"Lokalizacja:\s*Adres:\s*(\S+)", description)
     if match:
-        return match.group(1).strip()
+        merchant_match = match.group(1).strip()
+        return _normalize_merchant(merchant_match)
 
-    return ""
+    return merchant_match
 
+def _normalize_merchant(merchant: str) -> str:
+    return re.sub(r"\s+", " ", merchant).strip()

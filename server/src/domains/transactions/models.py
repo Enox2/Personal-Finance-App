@@ -1,10 +1,14 @@
 from datetime import date, datetime
 from decimal import Decimal
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Date, DateTime, ForeignKey, Integer, Numeric, String, Text, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.db.session import Base
+
+if TYPE_CHECKING:
+    from src.domains.categories.models import Category
 
 
 class Transaction(Base):
@@ -20,9 +24,12 @@ class Transaction(Base):
     amount: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
     currency: Mapped[str] = mapped_column(String(10), nullable=False)
     merchant: Mapped[str] = mapped_column(String(255), default="", nullable=False)
-    category: Mapped[str | None] = mapped_column(String(100), nullable=True, index=True)
+    category_id: Mapped[int | None] = mapped_column(
+        ForeignKey("categories.id"), nullable=True, index=True
+    )
     transaction_description: Mapped[str] = mapped_column(Text, nullable=False)
     created_date: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
+    category: Mapped["Category | None"] = relationship(back_populates="transactions")

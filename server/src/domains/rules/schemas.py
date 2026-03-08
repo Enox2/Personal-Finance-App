@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 class CategoryRuleBase(BaseModel):
     pattern: str
-    category: str
+    category_id: int
     priority: int = 0
 
 
@@ -15,7 +15,7 @@ class CategoryRuleCreate(CategoryRuleBase):
 
 class CategoryRuleUpdate(BaseModel):
     pattern: str | None = None
-    category: str | None = None
+    category_id: int | None = None
     priority: int | None = None
 
 
@@ -24,4 +24,3 @@ class CategoryRuleRead(CategoryRuleBase):
     created_date: datetime
 
     model_config = {"from_attributes": True}
-

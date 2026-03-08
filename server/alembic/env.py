@@ -20,11 +20,12 @@ sys.path.append(str(BASE_DIR / "src"))
 # noinspection PyUnusedImports
 from src.db.session import Base
 from src.domains.auth import models as auth_models
+from src.domains.categories import models as categories_models
 from src.domains.csv import models as csv_models
 from src.domains.rules import models as rules_models
 from src.domains.transactions import models as transactions_models
 
-_ = (auth_models, csv_models, rules_models, transactions_models)
+_ = (auth_models, categories_models, csv_models, rules_models, transactions_models)
 
 # Alembic config
 config = context.config

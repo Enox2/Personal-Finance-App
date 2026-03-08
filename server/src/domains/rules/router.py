@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from src.domains.auth.dependencies import get_current_user
 from src.domains.rules.dependencies import get_rules_service
 from src.domains.rules.schemas import CategoryRuleCreate, CategoryRuleRead, CategoryRuleUpdate
-from src.domains.rules.service import RulesService
+from src.domains.rules.service import InvalidCategoryError, RulesService
 
 router = APIRouter(
     prefix="/rules", tags=["rules"], dependencies=[Depends(get_current_user)]
@@ -22,7 +22,10 @@ async def create_rule(
     rule: CategoryRuleCreate,
     service: RulesService = Depends(get_rules_service),
 ):
-    return await service.create_rule(rule)
+    try:
+        return await service.create_rule(rule)
+    except InvalidCategoryError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc))
 
 
 @router.put("/{rule_id}", response_model=CategoryRuleRead)
@@ -31,7 +34,11 @@ async def update_rule(
     rule: CategoryRuleUpdate,
     service: RulesService = Depends(get_rules_service),
 ):
-    updated = await service.update_rule(rule_id, rule)
+    try:
+        updated = await service.update_rule(rule_id, rule)
+    except InvalidCategoryError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc))
+
     if updated is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Rule not found")
     return updated
@@ -46,4 +53,3 @@ async def delete_rule(
     if not deleted:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Rule not found")
     return None
-

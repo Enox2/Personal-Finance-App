@@ -13,8 +13,7 @@ class TransactionRead(BaseModel):
     amount: Decimal
     currency: str
     merchant: str
-    category: str | None
+    category_id: int | None
     transaction_description: str
 
     model_config = {"from_attributes": True}
-

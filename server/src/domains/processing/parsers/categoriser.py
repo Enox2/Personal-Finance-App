@@ -6,13 +6,13 @@ from pandas import DataFrame
 
 class RuleLike(Protocol):
     pattern: str
-    category: str
+    category_id: int
     priority: int
 
 
 def categorise_transactions(df: DataFrame, rules: list[RuleLike]) -> DataFrame:
-    if "category" not in df.columns:
-        df["category"] = None
+    if "category_id" not in df.columns:
+        df["category_id"] = None
 
     if "merchant" not in df.columns:
         df["merchant"] = ""
@@ -21,6 +21,8 @@ def categorise_transactions(df: DataFrame, rules: list[RuleLike]) -> DataFrame:
 
     for rule in rules_sorted:
         try:
+            escaped = re.escape(rule.pattern)
+            print(f"Compiling regex for pattern: {rule.pattern} (escaped: {escaped})")
             compiled = re.compile(rule.pattern, flags=re.IGNORECASE)
         except re.error:
             continue
@@ -31,7 +33,7 @@ def categorise_transactions(df: DataFrame, rules: list[RuleLike]) -> DataFrame:
             merchant_series.str.contains(compiled, na=False)
             | description_series.str.contains(compiled, na=False)
         )
-        uncategorised_mask = df["category"].isna() & matches
-        df.loc[uncategorised_mask, "category"] = rule.category
+        uncategorised_mask = df["category_id"].isna() & matches
+        df.loc[uncategorised_mask, "category_id"] = rule.category_id
 
     return df

@@ -8,7 +8,7 @@ from src.domains.processing.parsers.categoriser import categorise_transactions
 @dataclass
 class Rule:
     pattern: str
-    category: str
+    category_id: int
     priority: int = 0
 
 
@@ -22,13 +22,13 @@ def main() -> None:
     )
 
     rules = [
-        Rule(pattern=r"LIDL|BIEDRONKA|NETTO", category="groceries", priority=10),
-        Rule(pattern=r"APPLE\.COM|YOUTUBE", category="subscriptions", priority=5),
-        Rule(pattern=r"UBER", category="transport", priority=1),
+        Rule(pattern=r"LIDL|BIEDRONKA|NETTO", category_id=1, priority=10),
+        Rule(pattern=r"APPLE\.COM|YOUTUBE", category_id=2, priority=5),
+        Rule(pattern=r"UBER", category_id=3, priority=1),
     ]
 
     df = categorise_transactions(df, rules)
-    print(df[["merchant", "category"]])
+    print(df[["merchant", "category_id"]])
 
 
 if __name__ == "__main__":
