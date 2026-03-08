@@ -50,3 +50,4 @@ def extract_merchant(description: str) -> str:
         return match.group(1).strip()
 
     return ""
+

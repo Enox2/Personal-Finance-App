@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-from src.domains.etl.parsers.categoriser import categorise_transactions
+from src.domains.processing.parsers.categoriser import categorise_transactions
 
 
 @dataclass
@@ -33,4 +33,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

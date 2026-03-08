@@ -1,11 +1,16 @@
 import re
+from typing import Protocol
 
 from pandas import DataFrame
 
-from src.domains.etl.models import CategoryRule
+
+class RuleLike(Protocol):
+    pattern: str
+    category: str
+    priority: int
 
 
-def categorise_transactions(df: DataFrame, rules: list[CategoryRule]) -> DataFrame:
+def categorise_transactions(df: DataFrame, rules: list[RuleLike]) -> DataFrame:
     if "category" not in df.columns:
         df["category"] = None
 
@@ -30,4 +35,3 @@ def categorise_transactions(df: DataFrame, rules: list[CategoryRule]) -> DataFra
         df.loc[uncategorised_mask, "category"] = rule.category
 
     return df
-
