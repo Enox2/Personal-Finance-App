@@ -10,14 +10,14 @@ router = APIRouter(
 )
 
 
-@router.get("", response_model=list[CategoryRuleRead])
+@router.get("/list", response_model=list[CategoryRuleRead])
 async def list_rules(
     service: RulesService = Depends(get_rules_service),
 ):
     return await service.list_rules()
 
 
-@router.post("", response_model=CategoryRuleRead, status_code=status.HTTP_201_CREATED)
+@router.post("/create", response_model=CategoryRuleRead, status_code=status.HTTP_201_CREATED)
 async def create_rule(
     rule: CategoryRuleCreate,
     service: RulesService = Depends(get_rules_service),

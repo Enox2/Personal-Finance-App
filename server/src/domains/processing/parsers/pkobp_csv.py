@@ -29,12 +29,32 @@ def prepare_dataframe(file_model: CSVFile | None) -> DataFrame:
         "transaction_description",
     ]
 
+    df["transaction_type"] = df["transaction_type"].apply(translate_transaction_type)
+
     df["transaction_date"] = pd.to_datetime(df["transaction_date"]).dt.date
     df["value_date"] = pd.to_datetime(df["value_date"]).dt.date
     df["merchant"] = df["transaction_description"].apply(extract_merchant)
 
     return df
 
+def translate_transaction_type(transaction_type: str) -> str:
+    TRANSACTION_TYPES = {
+        'Płatność kartą': 'CardPayment',
+        'Obciążenie': 'Charge',
+        'Przelew na konto': 'AccountTransfer',
+        'Płatność web - kod mobilny': 'WebPaymentMobileCode',
+        'Wypłata w bankomacie - kod mobilny': 'AtmWithdrawalMobileCode',
+        'Przelew z rachunku': 'TransferFromAccount',
+        'Przelew na telefon przychodz. wew.': 'BLIK',
+        'Przelew z karty': 'TransferFromCard',
+        'Zwrot płatności kartą': 'CardPaymentRefund',
+        'Przelew na telefon przychodz. zew.': 'BLIK',
+        'Zwrot w terminalu': 'TerminalRefund',
+        'Zakup w terminalu - kod mobilny': 'BLIK',
+        'Wypłata z bankomatu': 'AtmWithdrawal',
+        'WYMIANA W KANTORZE - OBCIĄŻENIE': 'CurrencyExchangeCharge',
+    }
+    return TRANSACTION_TYPES.get(transaction_type, transaction_type)
 
 def extract_merchant(description: str) -> str:
     merchant_match = ""

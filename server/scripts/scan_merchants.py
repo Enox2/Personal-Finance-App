@@ -119,6 +119,14 @@ def main() -> int:
         axis=1,
     )
 
+    result = []
+
+    for item in df["transaction_type"]:
+        if item not in result:
+            result.append(item)
+
+    print(result)
+
     summary = (
         df[df["merchant_key"] != ""]
         .groupby(["merchant_key", "suggested_category"], as_index=False)
