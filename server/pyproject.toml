@@ -44,6 +44,13 @@ profile = "black"
 python_version = 3.11
 strict = true
 
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+	"unit: fast tests that isolate logic and use mocks",
+	"integration: tests that exercise app wiring, DB, or filesystem",
+]
+
 [build-system]
 requires = ["poetry-core>=1.6.0"]
 build-backend = "poetry.core.masonry.api"
